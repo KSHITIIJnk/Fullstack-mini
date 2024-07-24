@@ -98,13 +98,13 @@ const Hotels = () => {
               />
             </div>
             <Menu as="div" className="relative inline-block text-left">
-              <Menu.Button className="inline-flex items-center justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-black hover:bg-gray-50 focus:outline-none">
+              <MenuButton className="inline-flex items-center justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-black hover:bg-gray-50 focus:outline-none">
                 Filter
                 <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5 text-black" aria-hidden="true" />
-              </Menu.Button>
-              <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              </MenuButton>
+              <MenuItems className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <div className="py-1">
-                  <Menu.Item>
+                  <MenuItem>
                     {({ active }) => (
                       <button
                         onClick={() => handleFilterChange('highestRated')}
@@ -113,8 +113,8 @@ const Hotels = () => {
                         Highest Rated
                       </button>
                     )}
-                  </Menu.Item>
-                  <Menu.Item>
+                  </MenuItem>
+                  <MenuItem>
                     {({ active }) => (
                       <button
                         onClick={() => handleFilterChange('mostAffordable')}
@@ -123,9 +123,9 @@ const Hotels = () => {
                         Most Affordable
                       </button>
                     )}
-                  </Menu.Item>
+                  </MenuItem>
                 </div>
-              </Menu.Items>
+              </MenuItems>
             </Menu>
           </div>
         </div>
