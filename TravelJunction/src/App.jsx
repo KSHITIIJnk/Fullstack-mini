@@ -10,8 +10,7 @@ import Frontpage from './pages/Frontpage';
 import Hotel from './pages/Hotels';
 import HotelDetails from '../src/Components/Details/hoteldetails'; // Import HotelDetails page
 import Tours from './pages/Tours';
-import TourD from './Components/Details/TourD'; // Import TourD component
-import Contactus from './pages/Contactus';
+import Contactus from '../src/pages/Contactus';
 import Profile from './pages/Profile'; // Import Profile component
 
 const App = () => {
@@ -34,7 +33,7 @@ const App = () => {
 
         {/* Routes for Tours and specific Tour */}
         <Route path="/tours" element={<Tours />} />
-        <Route path="/tour/:id" element={<TourD />} /> {/* Dynamic route for specific tour */}
+
 
         {/* Route for Profile */}
         <Route path="/profile" element={<Profile />} />
