@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../Components/Nav/Navbar';
 import Footer from '../Components/Footersection/Footer';
 
 const HotelDetails = () => {
   const { id } = useParams(); // Get the hotel ID from the URL
+  const navigate = useNavigate();
   const [hotel, setHotel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,7 +29,7 @@ const HotelDetails = () => {
     paymentMethod: '',
     cardNumber: '',
     cardExpiry: '',
-    cardCVV: ''
+    cardCVV: '',
   });
 
   useEffect(() => {
@@ -37,11 +38,11 @@ const HotelDetails = () => {
         setLoading(true);
         const response = await axios.get(`http://localhost:5000/api/hotels/${id}`);
         setHotel(response.data);
-        setLoading(false);
       } catch (error) {
-        setLoading(false);
         setError('Error fetching hotel details');
         console.error('Error fetching hotel details:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -56,7 +57,7 @@ const HotelDetails = () => {
     }));
   };
 
-  const handleBooking = () => {
+  const validateBookingDetails = () => {
     const {
       name,
       gender,
@@ -72,39 +73,57 @@ const HotelDetails = () => {
       checkOutDate,
       numberOfRooms,
       roomType,
-      specialRequests,
       paymentMethod,
       cardNumber,
       cardExpiry,
-      cardCVV
+      cardCVV,
     } = bookingDetails;
 
     if (!name || !gender || !age || !contactNumber || !email || !address || !city || !state || !zipCode || !country || !checkInDate || !checkOutDate || !numberOfRooms || !roomType || !paymentMethod ||
       (paymentMethod !== 'paypal' && (!cardNumber || !cardExpiry || !cardCVV))) {
+      return false;
+    }
+    return true;
+  };
+
+  const handleBooking = () => {
+    if (!validateBookingDetails()) {
       alert('Please fill out all required fields.');
       return;
     }
 
-    // Handle booking logic here
-    console.log('Booking details:', bookingDetails);
+    const bookingSummary = {
+      ...bookingDetails,
+      hotelName: hotel.name,
+      totalPrice: calculateTotalPrice(),
+    };
+
+    // Navigate to the HotelFinal page with booking details
+    navigate('/hotelfinal', { state: { bookingSummary } });
+  };
+
+  const calculateTotalPrice = () => {
+    // Assuming price per night is a number and numberOfRooms is a number
+    const pricePerNight = hotel?.price || 0;
+    const nights = (new Date(bookingDetails.checkOutDate) - new Date(bookingDetails.checkInDate)) / (1000 * 60 * 60 * 24);
+    return (pricePerNight * bookingDetails.numberOfRooms * nights).toFixed(2);
   };
 
   if (loading) return <div className="text-center p-8 text-xl font-semibold">Loading...</div>;
   if (error) return <div className="text-center p-8 text-xl font-semibold text-red-600">{error}</div>;
   if (!hotel) return <div className="text-center p-8 text-xl font-semibold">Hotel not found</div>;
 
-  // Destructure and provide default values to avoid issues
   const {
     name,
     description,
     location,
     price,
     rating,
-    numberOfRooms = 'N/A',
-    contactNumber = 'N/A',
+    numberOfRooms: hotelNumberOfRooms = 'N/A',
+    contactNumber: hotelContactNumber = 'N/A',
     facilities = [],
     amenities = [],
-    image = ''
+    image = '',
   } = hotel;
 
   return (
@@ -129,8 +148,8 @@ const HotelDetails = () => {
               <p className="text-lg text-[#4F6F52]"><strong>Location:</strong> {location}</p>
               <p className="text-lg text-[#4F6F52]"><strong>Price per Night:</strong> ${price}</p>
               <p className="text-lg text-[#4F6F52]"><strong>Rating:</strong> {rating} stars</p>
-              <p className="text-lg text-[#4F6F52]"><strong>Number of Rooms:</strong> {numberOfRooms}</p>
-              <p className="text-lg text-[#4F6F52]"><strong>Contact Number:</strong> {contactNumber}</p>
+              <p className="text-lg text-[#4F6F52]"><strong>Number of Rooms:</strong> {hotelNumberOfRooms}</p>
+              <p className="text-lg text-[#4F6F52]"><strong>Contact Number:</strong> {hotelContactNumber}</p>
               <p className="text-lg text-[#4F6F52]"><strong>Facilities:</strong> {facilities.length ? facilities.join(', ') : 'Not available'}</p>
               <p className="text-lg text-[#4F6F52]"><strong>Amenities:</strong> {amenities.length ? amenities.join(', ') : 'Not available'}</p>
             </div>
@@ -255,8 +274,6 @@ const HotelDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-
-              {/* Booking Details */}
               <div className="mb-4">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="checkInDate">Check-In Date</label>
                 <input
@@ -292,18 +309,14 @@ const HotelDetails = () => {
               </div>
               <div className="mb-4">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="roomType">Room Type</label>
-                <select
+                <input
+                  type="text"
                   id="roomType"
                   name="roomType"
                   value={bookingDetails.roomType}
                   onChange={handleChange}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
-                >
-                  <option value="">Select Room Type</option>
-                  <option value="single">Single</option>
-                  <option value="double">Double</option>
-                  <option value="suite">Suite</option>
-                </select>
+                />
               </div>
               <div className="mb-4">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="specialRequests">Special Requests</label>
@@ -315,8 +328,6 @@ const HotelDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-
-              {/* Payment Information */}
               <div className="mb-4">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="paymentMethod">Payment Method</label>
                 <select
@@ -328,11 +339,10 @@ const HotelDetails = () => {
                 >
                   <option value="">Select Payment Method</option>
                   <option value="creditCard">Credit Card</option>
-                  <option value="debitCard">Debit Card</option>
                   <option value="paypal">PayPal</option>
                 </select>
               </div>
-              {bookingDetails.paymentMethod && bookingDetails.paymentMethod !== 'paypal' && (
+              {bookingDetails.paymentMethod === 'creditCard' && (
                 <>
                   <div className="mb-4">
                     <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="cardNumber">Card Number</label>
@@ -369,15 +379,18 @@ const HotelDetails = () => {
                   </div>
                 </>
               )}
-              <button
-                type="button"
-                onClick={handleBooking}
-                className="w-full py-3 bg-[#3A4D39] text-white font-semibold rounded-lg shadow-md hover:bg-[#2c3e2a] focus:outline-none focus:ring-2 focus:ring-[#2c3e2a] transition duration-300"
-              >
-                Confirm Booking
-              </button>
+              <div className="col-span-full">
+                <button
+                  type="button"
+                  onClick={handleBooking}
+                  className="w-full bg-[#3A4D39] text-white py-3 px-6 rounded-lg shadow-lg hover:bg-[#2a3b26]"
+                >
+                  Confirm Booking
+                </button>
+              </div>
             </form>
           </div>
+          <p className="text-lg text-[#4F6F52] mt-4"><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
         </div>
       </div>
       <Footer />

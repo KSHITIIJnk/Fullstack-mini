@@ -20,9 +20,11 @@ mongoose.connect(MONGO_URI)
 // Routes
 const hotelsRoutes = require('./routes/hotels');
 const toursRoutes = require('./routes/tours');
+const cartRoutes = require('./routes/cart'); // Add this line
 
 app.use('/api/hotels', hotelsRoutes);
 app.use('/api/tours', toursRoutes);
+app.use('/api/cart', cartRoutes); // Add this line
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

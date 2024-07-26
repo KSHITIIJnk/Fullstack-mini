@@ -2,15 +2,18 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
+
+// Import pages
 import LandingPage from './pages/Landing'; // Ensure this path is correct
 import Sign from './pages/Sign';
 import Signup from './pages/Signup';
 import Forgotpass from './pages/Forgotpass';
 import Frontpage from './pages/Frontpage';
 import Hotel from './pages/Hotels';
-import HotelsDetails from './pages/HotelsDetails'
+import HotelsDetails from './pages/HotelsDetails';
 import Tours from './pages/Tours';
-import Contactus from '../src/pages/Contactus'; // Ensure this path is correct
+import Contactus from './pages/Contactus'; // Ensure this path is correct
+import Hotelfinal from './pages/Hotelfinal'; // Import the Hotelfinal component
 
 const App = () => {
   return (
@@ -30,6 +33,8 @@ const App = () => {
         <Route path="/hotels" element={<Hotel />} />
         <Route path="/hotel/:id" element={<HotelsDetails />} />
 
+        {/* Route for the Hotelfinal page */}
+        <Route path="/hotelfinal" element={<Hotelfinal />} />
 
         {/* Routes for Tours */}
         <Route path="/tours" element={<Tours />} />
