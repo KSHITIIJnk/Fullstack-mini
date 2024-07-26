@@ -20,8 +20,13 @@ const ContactUs = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/contactForms', formData);
+      // Ensure this URL matches your backend route
+      const response = await axios.post('http://localhost:5000/api/contact_forms', formData);
+
+      // Log response for debugging
       console.log('Form submitted successfully!', response.data);
+
+      // Reset form fields
       setFormData({
         firstName: '',
         lastName: '',
@@ -30,6 +35,8 @@ const ContactUs = () => {
         subject: '',
         message: ''
       });
+
+      // Show success toast
       toast.success('Message sent successfully!', {
         position: 'bottom-right',
         autoClose: 3000,
@@ -40,7 +47,10 @@ const ContactUs = () => {
         progress: undefined,
       });
     } catch (error) {
+      // Log error for debugging
       console.error('Error submitting form:', error);
+
+      // Show error toast
       toast.error('Failed to send message. Please try again later.', {
         position: 'bottom-right',
         autoClose: 3000,
@@ -58,7 +68,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#ECE3CE  ]">
+    <div className="flex flex-col min-h-screen bg-[#ECE3CE]">
       <Navbar />
       <div className="flex flex-grow pt-20">
         {/* Image Section */}
