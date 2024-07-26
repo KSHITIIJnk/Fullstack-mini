@@ -15,6 +15,8 @@ import Tours from './pages/Tours';
 import Contactus from './pages/Contactus'; // Ensure this path is correct
 import Hotelfinal from './pages/Hotelfinal'; // Import the Hotelfinal component
 import TourDetails from './pages/TourDetails'; // Import the TourDetails component
+import Tourfinal from './pages/./Tourfinal'; // Import the TourFinal component
+
 
 const App = () => {
   return (
@@ -40,6 +42,9 @@ const App = () => {
         {/* Routes for Tours and TourDetails */}
         <Route path="/tours" element={<Tours />} />
         <Route path="/tour/:id" element={<TourDetails />} />
+        <Route path="/tourfinal" element={<Tourfinal />} />
+
+
 
         {/* Other routes */}
         <Route path="/sign" element={<Sign />} />

@@ -21,8 +21,14 @@ const TourDetails = () => {
     state: '',
     zipCode: '',
     country: '',
+    startDate: '',
+    endDate: '',
     tourDate: '',
     numberOfParticipants: '',
+    flightIncluded: false,
+    flightClass: '',
+    hotelIncluded: false,
+    hotelClass: '',
     specialRequests: '',
     paymentMethod: '',
     cardNumber: '',
@@ -48,10 +54,10 @@ const TourDetails = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setBookingDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -67,24 +73,42 @@ const TourDetails = () => {
       state,
       zipCode,
       country,
+      startDate,
+      endDate,
       tourDate,
       numberOfParticipants,
+      flightIncluded,
+      hotelIncluded,
       paymentMethod,
       cardNumber,
       cardExpiry,
       cardCVV,
     } = bookingDetails;
 
-    if (!name || !gender || !age || !contactNumber || !email || !address || !city || !state || !zipCode || !country || !tourDate || !numberOfParticipants || !paymentMethod ||
+    if (!name || !gender || !age || !contactNumber || !email || !address || !city || !state || !zipCode || !country || !startDate || !endDate || !tourDate || !numberOfParticipants || (flightIncluded && !flightClass) || (hotelIncluded && !hotelClass) || !paymentMethod ||
       (paymentMethod !== 'paypal' && (!cardNumber || !cardExpiry || !cardCVV))) {
       return false;
     }
     return true;
   };
 
+  const calculateTotalPrice = () => {
+    const basePrice = tour?.price || 0;
+    const numberOfParticipants = bookingDetails.numberOfParticipants || 1;
+
+    // Calculate additional costs for flights and hotels
+    const flightPrice = bookingDetails.flightIncluded ? (bookingDetails.flightClass === 'firstClass' ? 500 : 200) * numberOfParticipants : 0;
+    const hotelPrice = bookingDetails.hotelIncluded ? (bookingDetails.hotelClass === 'luxury' ? 300 : 100) * numberOfParticipants : 0;
+
+    return (basePrice * numberOfParticipants + flightPrice + hotelPrice).toFixed(2);
+  };
+
+  
+
   const handleBooking = () => {
     if (!validateBookingDetails()) {
       alert('Please fill out all required fields.');
+      navigate('/tourfinal');
       return;
     }
 
@@ -96,12 +120,6 @@ const TourDetails = () => {
 
     // Navigate to the TourFinal page with booking details
     navigate('/tourfinal', { state: { bookingSummary } });
-  };
-
-  const calculateTotalPrice = () => {
-    // Assuming price per participant is a number
-    const pricePerParticipant = tour?.price || 0;
-    return (pricePerParticipant * bookingDetails.numberOfParticipants).toFixed(2);
   };
 
   if (loading) return <div className="text-center p-8 text-xl font-semibold">Loading...</div>;
@@ -116,6 +134,7 @@ const TourDetails = () => {
     price,
     rating,
     image,
+    tourDuration,
   } = tour;
 
   return (
@@ -140,6 +159,7 @@ const TourDetails = () => {
               <p className="text-lg text-[#4F6F52]"><strong>Location:</strong> {city}, {country}</p>
               <p className="text-lg text-[#4F6F52]"><strong>Price per Participant:</strong> ${price}</p>
               <p className="text-lg text-[#4F6F52]"><strong>Rating:</strong> {rating} stars</p>
+              <p className="text-lg text-[#4F6F52]"><strong>Tour Duration:</strong> {tourDuration} days</p>
             </div>
           </div>
 
@@ -148,7 +168,7 @@ const TourDetails = () => {
             <h2 className="text-3xl font-bold text-[#3A4D39] mb-6">Book This Tour</h2>
             <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Personal Information */}
-              <div className="mb-4">
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="name">Name</label>
                 <input
                   type="text"
@@ -159,7 +179,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="gender">Gender</label>
                 <select
                   id="gender"
@@ -174,7 +195,8 @@ const TourDetails = () => {
                   <option value="other">Other</option>
                 </select>
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="age">Age</label>
                 <input
                   type="number"
@@ -185,7 +207,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="contactNumber">Contact Number</label>
                 <input
                   type="text"
@@ -196,7 +219,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -207,7 +231,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="address">Address</label>
                 <input
                   type="text"
@@ -218,7 +243,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="city">City</label>
                 <input
                   type="text"
@@ -229,7 +255,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="state">State</label>
                 <input
                   type="text"
@@ -240,7 +267,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="zipCode">Zip Code</label>
                 <input
                   type="text"
@@ -251,7 +279,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="country">Country</label>
                 <input
                   type="text"
@@ -262,7 +291,32 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
+                <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="startDate">Start Date</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  name="startDate"
+                  value={bookingDetails.startDate}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
+                />
+              </div>
+
+              <div className="mb-4 col-span-full">
+                <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="endDate">End Date</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  name="endDate"
+                  value={bookingDetails.endDate}
+                  onChange={handleChange}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
+                />
+              </div>
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="tourDate">Tour Date</label>
                 <input
                   type="date"
@@ -273,7 +327,8 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="numberOfParticipants">Number of Participants</label>
                 <input
                   type="number"
@@ -284,17 +339,83 @@ const TourDetails = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              {/* New Fields for Flight and Hotel */}
+              <div className="mb-4 col-span-full">
+                <label className="block text-[#4F6F52] mb-2 text-lg font-medium">Include Flight?</label>
+                <input
+                  type="checkbox"
+                  id="flightIncluded"
+                  name="flightIncluded"
+                  checked={bookingDetails.flightIncluded}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                <label htmlFor="flightIncluded" className="text-lg text-[#4F6F52]">Yes, include flights</label>
+              </div>
+
+              {bookingDetails.flightIncluded && (
+                <div className="mb-4 col-span-full">
+                  <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="flightClass">Flight Class</label>
+                  <select
+                    id="flightClass"
+                    name="flightClass"
+                    value={bookingDetails.flightClass}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
+                  >
+                    <option value="">Select Flight Class</option>
+                    <option value="economy">Economy</option>
+                    <option value="firstClass">First Class</option>
+                  </select>
+                </div>
+              )}
+
+              <div className="mb-4 col-span-full">
+                <label className="block text-[#4F6F52] mb-2 text-lg font-medium">Include Hotel?</label>
+                <input
+                  type="checkbox"
+                  id="hotelIncluded"
+                  name="hotelIncluded"
+                  checked={bookingDetails.hotelIncluded}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                <label htmlFor="hotelIncluded" className="text-lg text-[#4F6F52]">Yes, include hotels</label>
+              </div>
+
+              {bookingDetails.hotelIncluded && (
+                <div className="mb-4 col-span-full">
+                  <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="hotelClass">Hotel Class</label>
+                  <select
+                    id="hotelClass"
+                    name="hotelClass"
+                    value={bookingDetails.hotelClass}
+                    onChange={handleChange}
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
+                  >
+                    <option value="">Select Hotel Class</option>
+                    <option value="standard">Standard</option>
+                    <option value="luxury">Luxury</option>
+                  </select>
+                </div>
+              )}
+
+              {/* Special Requests */}
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="specialRequests">Special Requests</label>
                 <textarea
                   id="specialRequests"
                   name="specialRequests"
                   value={bookingDetails.specialRequests}
                   onChange={handleChange}
+                  rows="4"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                 />
               </div>
-              <div className="mb-4">
+
+              {/* Payment Information */}
+              <div className="mb-4 col-span-full">
                 <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="paymentMethod">Payment Method</label>
                 <select
                   id="paymentMethod"
@@ -308,9 +429,11 @@ const TourDetails = () => {
                   <option value="paypal">PayPal</option>
                 </select>
               </div>
+
+              {/* Conditional rendering for payment details */}
               {bookingDetails.paymentMethod === 'creditCard' && (
                 <>
-                  <div className="mb-4">
+                  <div className="mb-4 col-span-full">
                     <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="cardNumber">Card Number</label>
                     <input
                       type="text"
@@ -321,18 +444,21 @@ const TourDetails = () => {
                       className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                     />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="cardExpiry">Card Expiry</label>
+
+                  <div className="mb-4 col-span-full">
+                    <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="cardExpiry">Card Expiry Date</label>
                     <input
                       type="text"
                       id="cardExpiry"
                       name="cardExpiry"
                       value={bookingDetails.cardExpiry}
                       onChange={handleChange}
+                      placeholder="MM/YY"
                       className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3A4D39]"
                     />
                   </div>
-                  <div className="mb-4">
+
+                  <div className="mb-4 col-span-full">
                     <label className="block text-[#4F6F52] mb-2 text-lg font-medium" htmlFor="cardCVV">Card CVV</label>
                     <input
                       type="text"
@@ -345,18 +471,22 @@ const TourDetails = () => {
                   </div>
                 </>
               )}
-              <div className="col-span-full">
-                <button
-                  type="button"
-                  onClick={handleBooking}
-                  className="w-full bg-[#3A4D39] text-white py-3 px-6 rounded-lg shadow-lg hover:bg-[#2a3b26]"
-                >
-                  Confirm Booking
-                </button>
+
+              <div className="col-span-full text-center">
+              <button
+                type="button"
+                onClick={handleBooking}
+                className="bg-[#3A4D39] text-white py-3 px-6 rounded-lg shadow-lg hover:bg-[#2a3d27]"
+              >
+                Confirm Booking
+              </button>
               </div>
             </form>
+
+            <div className="text-center mt-6 text-xl font-semibold">
+              <p><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
+            </div>
           </div>
-          <p className="text-lg text-[#4F6F52] mt-4"><strong>Total Price:</strong> ${calculateTotalPrice()}</p>
         </div>
       </div>
       <Footer />
