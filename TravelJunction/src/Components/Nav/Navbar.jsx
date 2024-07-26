@@ -14,12 +14,12 @@ const Navbar = () => {
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#ECE3CE]">TravelJunct!on</span>
         </Link>
 
-        {/* Profile and Sign Out Buttons */}
+        {/* Cart and Sign Out Buttons */}
         <div className="flex md:order-2 space-x-6 md:space-x-0 rtl:space-x-reverse">
-          {/* Profile button */}
-          <Link to="/profile" className="text-[#ECE3CE] hover:text-[#FEE715] flex items-center mr-4 transition duration-300 ease-in-out">
-            <i className="fas fa-user-circle text-xl"></i>
-            <span className="ml-2">Profile</span>
+          {/* Cart button */}
+          <Link to="/cart" className="text-[#ECE3CE] hover:text-[#FEE715] flex items-center mr-4 transition duration-300 ease-in-out">
+            <i className="fas fa-shopping-cart text-xl"></i>
+            <span className="ml-2">Cart</span>
           </Link>
 
           {/* Sign Out Button */}
