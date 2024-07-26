@@ -14,6 +14,7 @@ import HotelsDetails from './pages/HotelsDetails';
 import Tours from './pages/Tours';
 import Contactus from './pages/Contactus'; // Ensure this path is correct
 import Hotelfinal from './pages/Hotelfinal'; // Import the Hotelfinal component
+import TourDetails from './pages/TourDetails'; // Import the TourDetails component
 
 const App = () => {
   return (
@@ -36,8 +37,9 @@ const App = () => {
         {/* Route for the Hotelfinal page */}
         <Route path="/hotelfinal" element={<Hotelfinal />} />
 
-        {/* Routes for Tours */}
+        {/* Routes for Tours and TourDetails */}
         <Route path="/tours" element={<Tours />} />
+        <Route path="/tour/:id" element={<TourDetails />} />
 
         {/* Other routes */}
         <Route path="/sign" element={<Sign />} />

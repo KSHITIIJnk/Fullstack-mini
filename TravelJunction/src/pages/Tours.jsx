@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaStar, FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import Navbar from '../Components/Nav/Navbar';
 import Footer from '../Components/Footersection/Footer';
 import TourCard from '../Components/Tour/TourCard'; // Ensure TourCard component is correctly defined
+import { FaStar, FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
 
 const Tours = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -45,7 +45,8 @@ const Tours = () => {
           filtered = filtered.sort((a, b) => b.rating - a.rating);
           break;
         case 'nearest':
-          filtered = filtered.sort((a, b) => a.distance - b.distance); // Assuming distance field
+          // Assuming we have a way to determine "nearest", this is a placeholder
+          filtered = filtered.sort((a, b) => a.city.localeCompare(b.city)); // Example sorting by city name
           break;
         case 'mostAffordable':
           filtered = filtered.sort((a, b) => a.price - b.price);
@@ -133,7 +134,7 @@ const Tours = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTours.length > 0 ? (
               filteredTours.map((tour) => (
-                <TourCard key={tour.id} tour={tour} />
+                <TourCard key={tour._id} tour={tour} />
               ))
             ) : (
               <p className="text-center text-lg text-[#3A4D39]">No tours found.</p>
