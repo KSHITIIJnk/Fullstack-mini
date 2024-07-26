@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Sign = () => {
   const [isSignIn, setIsSignIn] = useState(true);
-  const navigate = useNavigate(); // Step 2: Get the navigation function
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -16,35 +16,48 @@ const Sign = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white">
-      <div className="bg-white p-8 w-full max-w-md rounded-lg shadow-lg border border-black">
-        <h2 className="text-2xl font-bold mb-6 text-center text-black">{isSignIn ? 'Sign In' : 'Sign Out'}</h2>
+    <div className="flex min-h-screen items-center justify-center bg-[#ECE3CE]">
+      <div className="bg-[#4F6F52] p-8 w-full max-w-md rounded-2xl shadow-xl border border-[#3A4D39] transform transition duration-500 hover:scale-105">
+        <h2 className="text-3xl font-extrabold mb-6 text-center text-[#3A4D39]">{isSignIn ? 'Sign In' : 'Sign Out'}</h2>
         <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="form-control">
-              <label htmlFor="username" className="block text-sm font-medium text-black">Username or Email</label>
-              <input type="text" id="username" required className="mt-1 block w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" />
+              <label htmlFor="username" className="block text-sm font-semibold text-[#3A4D39]">Username or Email</label>
+              <input 
+                type="text" 
+                id="username" 
+                required 
+                className="mt-1 block w-full px-4 py-3 border border-[#3A4D39] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3A4D39] focus:border-transparent sm:text-sm transition duration-300" 
+              />
             </div>
             
             {isSignIn && (
               <div className="form-control">
-                <label htmlFor="password" className="block text-sm font-medium text-black">Password</label>
-                <input type="password" id="password" required className="mt-1 block w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm" />
+                <label htmlFor="password" className="block text-sm font-semibold text-[#3A4D39]">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  required 
+                  className="mt-1 block w-full px-4 py-3 border border-[#3A4D39] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#3A4D39] focus:border-transparent sm:text-sm transition duration-300" 
+                />
               </div>
             )}
 
-            <button type="submit" className="w-full py-2 px-4 bg-black text-white font-semibold rounded-md shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
+            <button 
+              type="submit" 
+              className="w-full py-3 bg-[#3A4D39] text-[#ECE3CE] font-bold rounded-lg shadow-lg hover:bg-[#2A3B29] transition duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#3A4D39]"
+            >
               {isSignIn ? 'Sign In' : 'Sign Out'}
             </button>
 
-            <div className="space-y-2 mt-4 text-center">
-              <Link to="/signup" className="text-black hover:underline block">
+            <div className="space-y-4 mt-6 text-center">
+              <Link to="/signup" className="text-[#3A4D39] hover:underline font-semibold block">
                 Need to Sign Up?
               </Link>
-              <Link to="/forgot-password" className="text-black hover:underline block">
+              <Link to="/forgot-password" className="text-[#3A4D39] hover:underline font-semibold block">
                 Forgot Password?
               </Link>
-              <Link to="/" className="text-black hover:underline block">
+              <Link to="/" className="text-[#3A4D39] hover:underline font-semibold block">
                 Back to Home
               </Link>
             </div>

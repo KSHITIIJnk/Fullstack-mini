@@ -2,50 +2,39 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import icon from '../../assets/icon.png';
 
-import 'firebase/auth';
-
 const Navbar = () => {
   const location = useLocation();
 
-  const handleSignOut = async () => {
-    try {
-      await firebase.auth().signOut();
-      console.log('User signed out');
-    } catch (error) {
-      console.error('Error signing out:', error.message);
-    }
-  };
-
   return (
-    <nav className="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200">
+    <nav className="bg-[#4F6F52] fixed w-full z-20 top-0 start-0 border-b border-[#3A4D39] shadow-lg">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo and Home Link */}
         <Link to="/frontpage" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src={icon} className="h-8" alt="Flowbite Logo" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap">TravelJunct!on</span>
+          <img src={icon} className="h-8" alt="TravelJunct!on Logo" />
+          <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#ECE3CE]">TravelJunct!on</span>
         </Link>
 
         {/* Profile and Sign Out Buttons */}
         <div className="flex md:order-2 space-x-6 md:space-x-0 rtl:space-x-reverse">
           {/* Profile button */}
-          <Link to="/profile" className="text-gray-900 hover:text-gray-600 flex items-center mr-4">
+          <Link to="/profile" className="text-[#ECE3CE] hover:text-[#FEE715] flex items-center mr-4 transition duration-300 ease-in-out">
             <i className="fas fa-user-circle text-xl"></i>
             <span className="ml-2">Profile</span>
           </Link>
 
           {/* Sign Out Button */}
-          <Link to="/sign" onClick={handleSignOut} className="text-black hover:text-gray-600 flex items-center ml-4">
+          <Link to="/sign" className="text-[#ECE3CE] hover:text-[#FEE715] flex items-center ml-4 transition duration-300 ease-in-out">
             <span className="ml-6">Sign Out</span>
           </Link>
         </div>
 
         {/* Navigation Links */}
         <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white">
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-[#3A4D39] rounded-lg bg-[#4F6F52] md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-[#4F6F52]">
             <li>
               <Link
                 to="/frontpage"
-                className={`block py-2 px-3 text-gray-900 rounded md:bg-transparent md:p-0 ${location.pathname === '/frontpage' ? 'bg-yellow-300 scribble' : ''}`}
+                className={`block py-2 px-3 text-[#ECE3CE] rounded md:bg-transparent md:p-0 transition duration-300 ease-in-out ${location.pathname === '/frontpage' ? 'bg-[#FEE715] text-[#3A4D39]' : 'hover:bg-[#3A4D39] hover:text-[#ECE3CE]'}`}
                 aria-current="page"
               >
                 Home
@@ -54,7 +43,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/hotels"
-                className={`block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-gray-900 ${location.pathname === '/hotels' ? 'bg-yellow-300 scribble' : ''}`}
+                className={`block py-2 px-3 text-[#ECE3CE] rounded md:bg-transparent md:p-0 transition duration-300 ease-in-out ${location.pathname === '/hotels' ? 'bg-[#FEE715] text-[#3A4D39]' : 'hover:bg-[#2D3A28] hover:text-[#ECE3CE]'}`}
               >
                 Hotels
               </Link>
@@ -62,7 +51,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/tours"
-                className={`block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-gray-900 ${location.pathname === '/tours' ? 'bg-yellow-300 scribble' : ''}`}
+                className={`block py-2 px-3 text-[#ECE3CE] rounded md:bg-transparent md:p-0 transition duration-300 ease-in-out ${location.pathname === '/tours' ? 'bg-[#FEE715] text-[#3A4D39]' : 'hover:bg-[#2D3A28] hover:text-[#ECE3CE]'}`}
               >
                 Tours
               </Link>
@@ -70,7 +59,7 @@ const Navbar = () => {
             <li>
               <Link
                 to="/contact"
-                className={`block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:p-0 dark:text-gray-900 ${location.pathname === '/contact' ? 'bg-yellow-300 scribble' : ''}`}
+                className={`block py-2 px-3 text-[#ECE3CE] rounded md:bg-transparent md:p-0 transition duration-300 ease-in-out ${location.pathname === '/contact' ? 'bg-[#FEE715] text-[#3A4D39]' : 'hover:bg-[#2D3A28] hover:text-[#ECE3CE]'}`}
               >
                 Contact Us
               </Link>
