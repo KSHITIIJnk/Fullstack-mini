@@ -10,15 +10,18 @@ import TourCard from '../Components/Tour/TourCard'; // Ensure TourCard component
 const Tours = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [tours, setTours] = useState([]);
+  const [filteredTours, setFilteredTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState('all');
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/tours');
+        const response = await axios.get('http://localhost:5000/api/tours'); // Updated API endpoint
         if (Array.isArray(response.data)) {
           setTours(response.data);
+          setFilteredTours(response.data); // Initialize filteredTours
         } else {
           console.error('Data fetched is not an array:', response.data);
         }
@@ -32,8 +35,38 @@ const Tours = () => {
     fetchTours();
   }, []);
 
+  useEffect(() => {
+    const applyFilters = () => {
+      let filtered = tours.filter(tour =>
+        tour.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+
+      switch (selectedFilter) {
+        case 'highestRated':
+          filtered = filtered.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'nearest':
+          filtered = filtered.sort((a, b) => a.distance - b.distance); // Assuming distance field
+          break;
+        case 'mostAffordable':
+          filtered = filtered.sort((a, b) => a.price - b.price);
+          break;
+        default:
+          break;
+      }
+
+      setFilteredTours(filtered);
+    };
+
+    applyFilters();
+  }, [searchTerm, selectedFilter, tours]);
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
   };
 
   return (
@@ -64,7 +97,7 @@ const Tours = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => console.log('Highest Rated Filter')}
+                        onClick={() => handleFilterChange('highestRated')}
                         className={`${
                           active ? 'bg-gray-100 text-[#3A4D39]' : 'text-[#3A4D39]'
                         } block px-4 py-2 text-sm`}
@@ -76,7 +109,7 @@ const Tours = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => console.log('Nearest Filter')}
+                        onClick={() => handleFilterChange('nearest')}
                         className={`${
                           active ? 'bg-gray-100 text-[#3A4D39]' : 'text-[#3A4D39]'
                         } block px-4 py-2 text-sm`}
@@ -88,7 +121,7 @@ const Tours = () => {
                   <Menu.Item>
                     {({ active }) => (
                       <button
-                        onClick={() => console.log('Most Affordable Filter')}
+                        onClick={() => handleFilterChange('mostAffordable')}
                         className={`${
                           active ? 'bg-gray-100 text-[#3A4D39]' : 'text-[#3A4D39]'
                         } block px-4 py-2 text-sm`}
@@ -108,8 +141,8 @@ const Tours = () => {
           <div className="text-center text-red-500">{error.message}</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tours.length > 0 ? (
-              tours.map((tour) => (
+            {filteredTours.length > 0 ? (
+              filteredTours.map((tour) => (
                 <TourCard key={tour.id} tour={tour} />
               ))
             ) : (

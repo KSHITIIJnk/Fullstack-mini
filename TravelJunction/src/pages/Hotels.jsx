@@ -8,25 +8,27 @@ import Navbar from '../Components/Nav/Navbar';
 import Footer from '../Components/Footersection/Footer';
 
 const HotelCard = ({ hotel }) => (
-  <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white transition duration-300 hover:shadow-xl flex flex-col justify-between">
-    <img className="w-full h-48 object-cover" src={hotel.image} alt={hotel.name} />
-    <div className="px-6 py-4">
-      <div className="font-bold text-xl mb-2 text-[#3A4D39]">{hotel.name}</div>
-      <p className="text-[#4F6F52] text-base">{hotel.description}</p>
-    </div>
-    <div className="px-6 pt-4 pb-2 flex justify-between items-center">
-      <span className="flex items-center text-sm font-semibold text-[#3A4D39]">
-        <FaMapMarkerAlt className="mr-2" />{hotel.location}
-      </span>
-      <span className="flex items-center text-sm font-semibold text-[#3A4D39]">
-        <FaStar className="mr-2" />{hotel.rating} stars
-      </span>
-    </div>
-    <div className="px-6 py-4">
-      <p className="text-[#3A4D39] font-semibold">${hotel.price} per night</p>
-      <Link to={`/hotel/${hotel._id}`} className="bg-[#739072] hover:bg-[#4F6F52] text-white font-bold py-2 px-4 rounded transition duration-300 mt-2 block">
-        Book Now
-      </Link>
+  <div className="max-w-sm w-full rounded-lg overflow-hidden shadow-lg bg-white transition duration-300 hover:shadow-xl flex flex-col">
+    <img className="w-full h-56 object-cover" src={hotel.image} alt={hotel.name} />
+    <div className="p-6 flex flex-col flex-grow">
+      <div className="mb-4">
+        <h2 className="font-bold text-2xl text-[#3A4D39] mb-2">{hotel.name}</h2>
+        <p className="text-[#4F6F52] text-base">{hotel.description}</p>
+      </div>
+      <div className="flex justify-between items-center mb-4">
+        <span className="flex items-center text-sm font-semibold text-[#3A4D39]">
+          <FaMapMarkerAlt className="mr-2" />{hotel.location}
+        </span>
+        <span className="flex items-center text-sm font-semibold text-[#3A4D39]">
+          <FaStar className="mr-2" />{hotel.rating} stars
+        </span>
+      </div>
+      <div className="mt-auto">
+        <p className="text-[#3A4D39] font-semibold mb-2">${hotel.price} per night</p>
+        <Link to={`/hotel/${hotel._id}`} className="bg-[#739072] hover:bg-[#4F6F52] text-white font-bold py-2 px-4 rounded transition duration-300 block text-center">
+          Book Now
+        </Link>
+      </div>
     </div>
   </div>
 );
@@ -39,7 +41,8 @@ const Hotels = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/hotels');
+        // Ensure the API endpoint matches your backend route
+        const response = await axios.get('http://localhost:5000/api/hotels');
         if (Array.isArray(response.data)) {
           setHotels(response.data);
         } else {
