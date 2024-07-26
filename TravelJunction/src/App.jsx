@@ -2,16 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify'; // Import ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // Import toast styles
-import LandingPage from './pages/Landing';
+import LandingPage from './pages/Landing'; // Ensure this path is correct
 import Sign from './pages/Sign';
 import Signup from './pages/Signup';
 import Forgotpass from './pages/Forgotpass';
 import Frontpage from './pages/Frontpage';
 import Hotel from './pages/Hotels';
-import HotelDetails from '../src/Components/Details/hoteldetails'; // Import HotelDetails page
+import HotelDetails from '../src/Components/Details/hoteldetails'; // Ensure this path is correct
 import Tours from './pages/Tours';
-import Contactus from '../src/pages/Contactus';
-import Profile from './pages/Profile'; // Import Profile component
+import Contactus from '../src/pages/Contactus'; // Ensure this path is correct
 
 const App = () => {
   return (
@@ -31,12 +30,8 @@ const App = () => {
         <Route path="/hotels" element={<Hotel />} />
         <Route path="/hotel/:id" element={<HotelDetails />} /> {/* Route for HotelDetails */}
 
-        {/* Routes for Tours and specific Tour */}
+        {/* Routes for Tours */}
         <Route path="/tours" element={<Tours />} />
-
-
-        {/* Route for Profile */}
-        <Route path="/profile" element={<Profile />} />
 
         {/* Other routes */}
         <Route path="/sign" element={<Sign />} />

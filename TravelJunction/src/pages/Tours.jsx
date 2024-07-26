@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Menu } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import { FaStar, FaMapMarkerAlt, FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import Navbar from '../Components/Nav/Navbar';
@@ -14,6 +12,7 @@ const Tours = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -67,6 +66,7 @@ const Tours = () => {
 
   const handleFilterChange = (filter) => {
     setSelectedFilter(filter);
+    setIsDropdownOpen(false); // Close dropdown after selection
   };
 
   return (
@@ -87,52 +87,42 @@ const Tours = () => {
                 className="pl-10 pr-4 py-2 rounded shadow appearance-none border w-full text-[#3A4D39] leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
-            <Menu as="div" className="relative inline-block text-left">
-              <Menu.Button className="inline-flex items-center justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-[#3A4D39] hover:bg-gray-50 focus:outline-none">
+            <div className="relative">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="inline-flex items-center justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-[#3A4D39] hover:bg-gray-50 focus:outline-none"
+              >
                 Filter
-                <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5 text-[#3A4D39]" aria-hidden="true" />
-              </Menu.Button>
-              <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="py-1">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => handleFilterChange('highestRated')}
-                        className={`${
-                          active ? 'bg-gray-100 text-[#3A4D39]' : 'text-[#3A4D39]'
-                        } block px-4 py-2 text-sm`}
-                      >
-                        Highest Rated
-                      </button>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => handleFilterChange('nearest')}
-                        className={`${
-                          active ? 'bg-gray-100 text-[#3A4D39]' : 'text-[#3A4D39]'
-                        } block px-4 py-2 text-sm`}
-                      >
-                        Nearest
-                      </button>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={() => handleFilterChange('mostAffordable')}
-                        className={`${
-                          active ? 'bg-gray-100 text-[#3A4D39]' : 'text-[#3A4D39]'
-                        } block px-4 py-2 text-sm`}
-                      >
-                        Most Affordable
-                      </button>
-                    )}
-                  </Menu.Item>
+                {/* Custom Dropdown Icon */}
+                <svg className="ml-2 h-5 w-5 text-[#3A4D39]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  <div className="py-1">
+                    <button
+                      onClick={() => handleFilterChange('highestRated')}
+                      className="block px-4 py-2 text-sm text-[#3A4D39] hover:bg-gray-100"
+                    >
+                      Highest Rated
+                    </button>
+                    <button
+                      onClick={() => handleFilterChange('nearest')}
+                      className="block px-4 py-2 text-sm text-[#3A4D39] hover:bg-gray-100"
+                    >
+                      Nearest
+                    </button>
+                    <button
+                      onClick={() => handleFilterChange('mostAffordable')}
+                      className="block px-4 py-2 text-sm text-[#3A4D39] hover:bg-gray-100"
+                    >
+                      Most Affordable
+                    </button>
+                  </div>
                 </div>
-              </Menu.Items>
-            </Menu>
+              )}
+            </div>
           </div>
         </div>
         {loading ? (
