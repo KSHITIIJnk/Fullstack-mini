@@ -6,7 +6,7 @@ import Navbar from '../Components/Nav/Navbar';
 import Footer from '../Components/Footersection/Footer';
 
 const HotelCard = ({ hotel }) => (
-  <div className="max-w-sm w-full rounded-lg overflow-hidden shadow-lg bg-white transition duration-300 hover:shadow-xl flex flex-col">
+  <div className="max-w-sm w-full rounded-lg overflow-hidden shadow-lg bg-white transition duration-300 hover:shadow-xl flex flex-col mx-auto">
     <img className="w-full h-56 object-cover" src={hotel.image} alt={hotel.name} />
     <div className="p-6 flex flex-col flex-grow">
       <div className="mb-4">

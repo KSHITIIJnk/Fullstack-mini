@@ -8,7 +8,7 @@ import Signup from './pages/Signup';
 import Forgotpass from './pages/Forgotpass';
 import Frontpage from './pages/Frontpage';
 import Hotel from './pages/Hotels';
-import HotelDetails from '../src/Components/Details/hoteldetails'; // Ensure this path is correct
+import HotelsDetails from './pages/HotelsDetails'
 import Tours from './pages/Tours';
 import Contactus from '../src/pages/Contactus'; // Ensure this path is correct
 
@@ -28,7 +28,8 @@ const App = () => {
 
         {/* Routes for Hotels and specific Hotel */}
         <Route path="/hotels" element={<Hotel />} />
-        <Route path="/hotel/:id" element={<HotelDetails />} /> {/* Route for HotelDetails */}
+        <Route path="/hotel/:id" element={<HotelsDetails />} />
+
 
         {/* Routes for Tours */}
         <Route path="/tours" element={<Tours />} />

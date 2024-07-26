@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose'); // Add this line
 const Hotel = require('../models/Hotel');
 
-// Get all hotels
+// Get all hotels with specific fields
 router.get('/', async (req, res) => {
   try {
-    const hotels = await Hotel.find();
+    // Projection to include only specific fields
+    const hotels = await Hotel.find({}, 'image name location price rating');
     res.json(hotels);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -23,7 +25,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Get a hotel by ID
+// Get a hotel by ID with specific fields
 router.get('/:id', async (req, res) => {
   console.log(`Fetching hotel with ID: ${req.params.id}`); // Debugging
 
@@ -33,7 +35,8 @@ router.get('/:id', async (req, res) => {
       return res.status(400).json({ message: 'Invalid hotel ID format' });
     }
 
-    const hotel = await Hotel.findById(req.params.id);
+    // Projection to include only specific fields
+    const hotel = await Hotel.findById(req.params.id, 'image name location description price rating');
     if (hotel) {
       res.json(hotel);
     } else {
