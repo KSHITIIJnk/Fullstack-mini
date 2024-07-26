@@ -11,13 +11,19 @@ const HotelDetails = () => {
   const [hotel, setHotel] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [numberOfRooms, setNumberOfRooms] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchHotelDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/hotels/${id}`);
+        setLoading(true);
+        const response = await axios.get(`http://localhost:5000/api/hotels/66a3a0205701de76c63ab739`);
         setHotel(response.data);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
+        setError('Error fetching hotel details');
         console.error('Error fetching hotel details:', error);
       }
     };
@@ -39,7 +45,11 @@ const HotelDetails = () => {
     setShowDialog(false);
   };
 
-  if (!hotel) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+
+  if (error) return <div>{error}</div>;
+
+  if (!hotel) return <div>Hotel not found</div>;
 
   return (
     <>
