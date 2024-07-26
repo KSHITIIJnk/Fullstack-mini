@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import icon from '../../assets/icon.png';
+import travel from '../../assets/travel.png';
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,7 +10,7 @@ const Navbar = () => {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo and Home Link */}
         <Link to="/frontpage" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src={icon} className="h-8" alt="TravelJunct!on Logo" />
+          <img src={travel} className="h-8" alt="TravelJunct!on Logo" />
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#ECE3CE]">TravelJunct!on</span>
         </Link>
 
