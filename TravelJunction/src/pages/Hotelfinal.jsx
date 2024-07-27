@@ -9,18 +9,6 @@ const Hotelfinal = () => {
   const navigate = useNavigate();
   const { bookingSummary } = location.state || {};
 
-  const handleBookNow = () => {
-    // Notify the user
-    toast.success('Hotel booking confirmed!');
-
-    // Navigate to the Hotels page
-    navigate('/hotels');
-  };
-
-  if (!bookingSummary) {
-    return <div className="text-center text-2xl mt-16">No booking details found.</div>;
-  }
-
   const calculateDays = (checkInDate, checkOutDate) => {
     const checkIn = new Date(checkInDate);
     const checkOut = new Date(checkOutDate);
@@ -30,6 +18,34 @@ const Hotelfinal = () => {
   };
 
   const numberOfDays = calculateDays(bookingSummary.checkInDate, bookingSummary.checkOutDate);
+
+  const handleBookNow = async () => {
+    try {
+      // Notify the user
+      toast.success('Hotel booking confirmed!');
+
+      // Send email confirmation
+      await fetch('http://localhost:5000/api/send-confirmation-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: bookingSummary.email, // Make sure this is part of your bookingSummary
+          bookingSummary,
+        }),
+      });
+
+      // Navigate to the Hotels page
+      navigate('/hotels');
+    } catch (error) {
+      toast.error('Failed to send email confirmation.');
+    }
+  };
+
+  if (!bookingSummary) {
+    return <div className="text-center text-2xl mt-16">No booking details found.</div>;
+  }
 
   return (
     <>

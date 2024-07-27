@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import travel from '../../assets/travel.png';
+import logout from '../../assets/logout.png'; // Add your sign-out icon path here
 
 const Navbar = () => {
   const location = useLocation();
@@ -14,17 +15,12 @@ const Navbar = () => {
           <span className="self-center text-2xl font-semibold whitespace-nowrap text-[#ECE3CE]">TravelJunct!on</span>
         </Link>
 
-        {/* Cart and Sign Out Buttons */}
+        {/* Sign Out Button */}
         <div className="flex md:order-2 space-x-6 md:space-x-0 rtl:space-x-reverse">
-          {/* Cart button */}
-          <Link to="/cart" className="text-[#ECE3CE] hover:text-[#FEE715] flex items-center mr-4 transition duration-300 ease-in-out">
-            <i className="fas fa-shopping-cart text-xl"></i>
-            <span className="ml-2">Cart</span>
-          </Link>
-
-          {/* Sign Out Button */}
+          {/* Sign Out Button with Icon */}
           <Link to="/sign" className="text-[#ECE3CE] hover:text-[#FEE715] flex items-center ml-4 transition duration-300 ease-in-out">
-            <span className="ml-6">Sign Out</span>
+            <img src={logout} alt="Sign Out" className="h-8" />
+            <span className="ml-2">Sign Out</span>
           </Link>
         </div>
 
