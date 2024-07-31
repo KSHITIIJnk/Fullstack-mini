@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -18,43 +17,44 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Configure your email transport (e.g., using Gmail, SendGrid, etc.)
-const transporter = nodemailer.createTransport({
-  service: 'gmail', // or another email service
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Remove email configuration and related code
+// const nodemailer = require('nodemailer');
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail', // or another email service
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+// });
 
-// Endpoint to send email
-app.post('/api/send-confirmation-email', async (req, res) => {
-  const { email, bookingSummary } = req.body;
+// Endpoint to send email - removed
+// app.post('/api/send-confirmation-email', async (req, res) => {
+//   const { email, bookingSummary } = req.body;
 
-  // Calculate number of days
-  const calculateDays = (checkInDate, checkOutDate) => {
-    const checkIn = new Date(checkInDate);
-    const checkOut = new Date(checkOutDate);
-    const timeDifference = checkOut - checkIn;
-    return timeDifference / (1000 * 3600 * 24);
-  };
+//   // Calculate number of days
+//   const calculateDays = (checkInDate, checkOutDate) => {
+//     const checkIn = new Date(checkInDate);
+//     const checkOut = new Date(checkOutDate);
+//     const timeDifference = checkOut - checkIn;
+//     return timeDifference / (1000 * 3600 * 24);
+//   };
 
-  const numberOfDays = calculateDays(bookingSummary.checkInDate, bookingSummary.checkOutDate);
+//   const numberOfDays = calculateDays(bookingSummary.checkInDate, bookingSummary.checkOutDate);
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Hotel Booking Confirmation',
-    text: `Dear ${bookingSummary.name},\n\nYour booking at ${bookingSummary.hotelName} has been confirmed.\n\nDetails:\nHotel Name: ${bookingSummary.hotelName}\nCheck-In Date: ${bookingSummary.checkInDate}\nCheck-Out Date: ${bookingSummary.checkOutDate}\nTotal Price: $${bookingSummary.totalPrice}\nNumber of Rooms: ${bookingSummary.numberOfRooms}\nRoom Type: ${bookingSummary.roomType}\nNumber of Days: ${numberOfDays}\n\nThank you for booking with us!`,
-  };
+//   const mailOptions = {
+//     from: process.env.EMAIL_USER,
+//     to: email,
+//     subject: 'Hotel Booking Confirmation',
+//     text: `Dear ${bookingSummary.name},\n\nYour booking at ${bookingSummary.hotelName} has been confirmed.\n\nDetails:\nHotel Name: ${bookingSummary.hotelName}\nCheck-In Date: ${bookingSummary.checkInDate}\nCheck-Out Date: ${bookingSummary.checkOutDate}\nTotal Price: $${bookingSummary.totalPrice}\nNumber of Rooms: ${bookingSummary.numberOfRooms}\nRoom Type: ${bookingSummary.roomType}\nNumber of Days: ${numberOfDays}\n\nThank you for booking with us!`,
+//   };
 
-  try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).send('Email sent successfully');
-  } catch (error) {
-    res.status(500).send('Error sending email');
-  }
-});
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     res.status(200).send('Email sent successfully');
+//   } catch (error) {
+//     res.status(500).send('Error sending email');
+//   }
+// });
 
 // Routes
 const hotelsRoutes = require('./routes/hotels');

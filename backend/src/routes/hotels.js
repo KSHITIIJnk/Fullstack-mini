@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose'); // Add this line
+const mongoose = require('mongoose');
 const Hotel = require('../models/Hotel');
 
 // Get all hotels with specific fields
 router.get('/', async (req, res) => {
   try {
     // Projection to include only specific fields
-    const hotels = await Hotel.find({}, 'image name location price rating');
+    const hotels = await Hotel.find({}, 'image name location price rating availableRooms');
     res.json(hotels);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
     }
 
     // Projection to include only specific fields
-    const hotel = await Hotel.findById(req.params.id, 'image name location description price rating');
+    const hotel = await Hotel.findById(req.params.id, 'image name location description price rating availableRooms');
     if (hotel) {
       res.json(hotel);
     } else {

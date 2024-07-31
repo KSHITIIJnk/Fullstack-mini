@@ -25,6 +25,11 @@ const HotelSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  availableRooms: {
+    type: Number,
+    required: true,
+    min: [0, 'Available rooms cannot be negative'],
+  },
 });
 
 module.exports = mongoose.model('Hotel', HotelSchema);
